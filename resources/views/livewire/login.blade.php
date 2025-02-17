@@ -31,4 +31,6 @@
             <span>Login with Google</span>
         </x-button>
     </x-card>
+
+    <livewire:word-table />
 </div>

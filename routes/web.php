@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Login;
+use App\Livewire\ViewWord;
 use App\Livewire\Welcome;
 use App\Models\FederatedUser;
 use Illuminate\Support\Facades\Auth;
@@ -58,3 +59,6 @@ Route::get('/auth/google-callback', function () {
 
     return redirect()->route('login');
 })->name('auth.google-callback');
+
+
+Route::get('/word/view/{id}', ViewWord::class)->name('word.view');
