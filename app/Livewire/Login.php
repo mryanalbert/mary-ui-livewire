@@ -28,7 +28,11 @@ class Login extends Component
             if (Hash::check($validated['password'], $user->userPassword)) {
                 Auth::login($user);
 
-                session(['session_data' => Auth::user()]);
+                session([
+                    'id' => $user->userId,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ]);
 
                 return redirect()->route('dashboard');
             }

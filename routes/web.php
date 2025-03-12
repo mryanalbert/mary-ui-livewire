@@ -28,7 +28,7 @@ Route::middleware('auth')
     ->name('dashboard');
 
 Route::get('/logout', function () {
-    Auth::logout();
+    // Auth::logout();
     session()->invalidate();
     session()->regenerateToken();
 
@@ -38,27 +38,28 @@ Route::get('/logout', function () {
 
 // Function: google login 
 // Description: This will redirect to Google
-Route::get('/auth/google', function () {
+Route::get('auth/google', function () {
     return Socialite::driver('google')->redirect();
 })->name('auth.google');
 
 
 // Function: google authentication
 // Description: This will authenticate the user through the google account
-Route::get('/auth/google-callback', function () {
+Route::get('auth/google/callback', function () {
     $googleUser = Socialite::driver('google')->user();
-
-    $user = FederatedUser::where('email', $googleUser->getEmail())->first();
+    $user = FederatedUser::where('email', $googleUser->email)->first();
 
     if ($user) {
         Auth::login($user);
-
-        session(['session_data' => Auth::user()]);
-        return redirect()->route('dashboard');
+        session([
+            'id' => $user->userId,
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
     }
 
-    return redirect()->route('login');
-})->name('auth.google-callback');
+    return redirect()->route('dashboard');
+});
 
 
 Route::get('/word/view/{id}', ViewWord::class)->name('word.view');

@@ -4,7 +4,7 @@
             <x-input label="Username" wire:model="username" />
             <x-password label="Password" wire:model="password" right />
 
-            <x-button label="Login" class="btn-primary mt-5" type="submit" spinner="save" />
+            <x-button label="Login" class="btn-primary mt-5" type="submit" spinner="save, sample" />
         </x-form>
 
         <!-- Separator with "or with" -->

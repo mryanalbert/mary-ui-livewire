@@ -10,51 +10,35 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
 
-    {{-- The navbar with `sticky` and `full-width` --}}
-    <x-nav sticky full-width>
-
+    {{-- NAVBAR mobile only --}}
+    <x-nav sticky class="lg:hidden">
         <x-slot:brand>
-            {{-- Drawer toggle for "main-drawer" --}}
+            <div class="ml-5 pt-5">App</div>
+        </x-slot:brand>
+        <x-slot:actions>
             <label for="main-drawer" class="lg:hidden mr-3">
                 <x-icon name="o-bars-3" class="cursor-pointer" />
             </label>
-
-            {{-- Brand --}}
-            <div>App</div>
-        </x-slot:brand>
-
-        {{-- Right side actions --}}
-        <x-slot:actions>
-            <x-button label="Notifications" icon="o-bell" link="###" class="btn-ghost btn-sm" responsive />
-            <x-dropdown>
-                <x-slot:trigger>
-                    <x-button icon="o-user" class="btn-circle btn-outline" />
-                </x-slot:trigger>
-
-                <x-menu-item title="Logout" link="{{ route('logout') }}" />
-            </x-dropdown>
         </x-slot:actions>
     </x-nav>
 
-    {{-- The main content with `full-width` --}}
-    <x-main with-nav full-width>
+    {{-- MAIN --}}
+    <x-main full-width>
+        {{-- SIDEBAR --}}
+        <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
 
-        {{-- This is a sidebar that works also as a drawer on small screens --}}
-        {{-- Notice the `main-drawer` reference here --}}
-        <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-200">
+            {{-- BRAND --}}
+            <div class="ml-5 pt-5">App</div>
 
-            {{-- User --}}
-            <x-list-item :item="session('session_data')" value="name" sub-value="email" no-separator no-hover
-                class="pt-2 text-2xl" />
-
-            <x-menu-separator />
-
-            {{-- Activates the menu item when a route matches the `link` property --}}
+            {{-- MENU --}}
             <x-menu activate-by-route>
-                <x-menu-item title="Home" icon="o-home" link="###" />
-                <x-menu-item title="Messages" icon="o-envelope" link="###" />
+
+                {{-- User --}}
+                <livewire:user-menu />
+
+                <x-menu-item title="Hello" icon="o-sparkles" link="/" />
                 <x-menu-sub title="Settings" icon="o-cog-6-tooth">
                     <x-menu-item title="Wifi" icon="o-wifi" link="####" />
                     <x-menu-item title="Archives" icon="o-archive-box" link="####" />
@@ -68,7 +52,7 @@
         </x-slot:content>
     </x-main>
 
-    {{--  TOAST area --}}
+    {{-- Toast --}}
     <x-toast />
 </body>
 
