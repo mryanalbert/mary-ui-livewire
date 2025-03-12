@@ -1,6 +1,8 @@
 <?php
 
+use App\Livewire\Items;
 use App\Livewire\Login;
+use App\Livewire\RequestItems;
 use App\Livewire\ViewWord;
 use App\Livewire\Welcome;
 use App\Models\FederatedUser;
@@ -23,9 +25,18 @@ Route::middleware('guest')
     ->get('/', Login::class)
     ->name('login');
 
-Route::middleware('auth')
-    ->get('/dashboard', Welcome::class)
-    ->name('dashboard');
+// Route::middleware('auth')
+//     ->get('/dashboard', Welcome::class)
+//     ->name('dashboard');
+
+Route::middleware(['auth']) // Apply the auth middleware to this group
+    ->group(function () {
+        Route::get('/dashboard', Welcome::class)->name('dashboard');
+        Route::get('/word/view/{id}', ViewWord::class)->name('word.view');
+        Route::get('/items', Items::class)->name('items');
+        Route::get('/request-items', RequestItems::class)->name('request-items');
+    });
+
 
 Route::get('/logout', function () {
     // Auth::logout();
@@ -60,6 +71,3 @@ Route::get('auth/google/callback', function () {
 
     return redirect()->route('dashboard');
 });
-
-
-Route::get('/word/view/{id}', ViewWord::class)->name('word.view');

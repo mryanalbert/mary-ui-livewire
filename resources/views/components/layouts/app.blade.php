@@ -38,7 +38,9 @@
                 {{-- User --}}
                 <livewire:user-menu />
 
-                <x-menu-item title="Hello" icon="o-sparkles" link="/" />
+                <x-menu-item title="Hello" icon="o-sparkles" wire:navigate link="{{ route('dashboard') }}" />
+                <x-menu-item title="Items" icon="o-sparkles" wire:navigate link="{{ route('items') }}" />
+                <x-menu-item title="Request Item" icon="o-sparkles" wire:navigate link="{{ route('request-items') }}" />
                 <x-menu-sub title="Settings" icon="o-cog-6-tooth">
                     <x-menu-item title="Wifi" icon="o-wifi" link="####" />
                     <x-menu-item title="Archives" icon="o-archive-box" link="####" />
