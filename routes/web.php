@@ -7,6 +7,7 @@ use App\Livewire\ViewWord;
 use App\Livewire\Welcome;
 use App\Models\FederatedUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -58,14 +59,37 @@ Route::get('auth/google', function () {
 // Description: This will authenticate the user through the google account
 Route::get('auth/google/callback', function () {
     $googleUser = Socialite::driver('google')->user();
-    $user = FederatedUser::where('email', $googleUser->email)->first();
+
+    $user = DB::select("
+        SELECT
+            email,
+            name,
+            priviledgeCode,
+            appusrId,
+            gUserName,
+            appusr_federated.isActive AS is_app_user_active,
+            usr_federated.isActive AS is_user_active
+        FROM usr_federated
+        JOIN appusr_federated
+            ON usr_federated.userName = appusr_federated.gUserName
+        WHERE email = ?
+        AND appId = ?
+    ", [$googleUser->email, 'PURJO']);
+
+    $user = collect($user)->first();
 
     if ($user) {
-        Auth::login($user);
+        $userForAuth = FederatedUser::where('email', $user->email)->first();
+
+        Auth::login($userForAuth);
         session([
-            'id' => $user->userId,
+            'id' => $user->appusrId,
             'name' => $user->name,
             'email' => $user->email,
+            'role' => $user->priviledgeCode,
+            'userName' => $user->gUserName,
+            'isUserActive' => $user->is_user_active,
+            'isAppUserActive' => $user->is_app_user_active,
         ]);
     }
 
